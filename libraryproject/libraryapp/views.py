@@ -83,3 +83,37 @@ class MemberLogin(generics.GenericAPIView):
                              'Result': [],
                              'HasError': 'True',
                              'status': 400})
+
+
+class Getallmembers(generics.GenericAPIView):
+    serializer_class = MemberSerializer
+    def get(self,request):
+        result=Member.objects.all()
+        serializer=MemberSerializer(result,many=True)
+        return Response({'Message': 'Successful',
+                         'Result': serializer.data,
+                         'HasError': 'False',
+                         'status': 200})
+
+class UpdateMembers(generics.GenericAPIView):
+    serializer_class = UpdateMemberSerializer
+    def put(self,request,id):
+        result=Member.objects.get(id=id)
+        serializer=UpdateMemberSerializer(result,data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'Message': 'Update Successful',
+                         'Result': serializer.data,
+                         'HasError': 'False',
+                         'status': 200})
+
+
+class DeleteMembers(generics.GenericAPIView):
+    serializer_class = MemberSerializer
+    def delete(self,request,id):
+        result=Member.objects.get(id=id)
+        result.delete()
+        return Response({'Message': 'Deleted Successful',
+                         'Result': [],
+                         'HasError': 'False',
+                         'status': 200})

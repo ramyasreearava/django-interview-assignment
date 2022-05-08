@@ -45,3 +45,20 @@ class MemberLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model=Member
         fields=['Username','Password']
+
+class UpdateMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Member
+        fields="__all__"
+
+    def update(self, instance, validated_data):
+        #password=validated_data.get('Password')
+        instance.LibrarianId=validated_data.get('LibrarianId')
+        instance.Firstname=validated_data.get('Firstname')
+        instance.Lastname=validated_data.get('Lastname')
+        instance.Email=validated_data.get('Email')
+        instance.Username=validated_data.get('Username')
+        instance.Password = make_password('Password')
+        instance.MobileNumber=validated_data.get('MobileNumber')
+        instance.save()
+        return instance
